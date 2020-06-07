@@ -1,11 +1,12 @@
-TITLE Program Template     (template.asm)
+TITLE Program 6    (program.asm)
 
 ; Author: Alec Barnard
 ; Last Modified: 6/5/20
 ; OSU email address: barnaral@oregonstate.edu
 ; Course number/section: 400
 ; Project Number: 06                Due Date: 6/7/20
-; Description: 
+; Description: Asks user to enter 10 signed integers, used ReadVal procedure to store characters as signed integer in array
+; displays all integers in array using WriteVal procedure to display signed integer as string of characters
 
 INCLUDE Irvine32.inc
 
