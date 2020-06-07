@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.25.28614.0	    06/07/20 18:45:28
+Microsoft (R) Macro Assembler Version 14.25.28614.0	    06/07/20 19:53:47
 #Program Template     (template.asm			     Page 1 - 1
 
 
@@ -199,7 +199,7 @@ Microsoft (R) Macro Assembler Version 14.25.28614.0	    06/07/20 18:45:28
  000000B9			main ENDP
 
 				;Reads string of characters and stores as signed integer
-				;receives: 
+				;receives: Prompt, outstring, string length 
 				;returns: Signed integer in eax
 				;preconditions: 
 				;registers changed: eax, ebx, ecx, esi
@@ -324,11 +324,11 @@ Microsoft (R) Macro Assembler Version 14.25.28614.0	    06/07/20 18:45:28
 
  0000013F			ReadVal ENDP
 
-				;Reads string of characters and stores as signed integer
-				;receives: 
-				;returns: String in edx
-				;preconditions: 
-				;registers changed: eax, ebx, ecx, esi
+				;Reads signed integer and writes as string of characters
+				;receives: Signed integer, outstring
+				;returns: 
+				;preconditions: Signed integer must be provided and outstring initalized
+				;registers changed: eax, ebx, ecx, edx, edi
  0000013F			WriteVal PROC
  0000013F  55				push ebp
  00000140  8B EC			mov ebp, esp
@@ -383,6 +383,9 @@ Microsoft (R) Macro Assembler Version 14.25.28614.0	    06/07/20 18:45:28
  00000170  83 C2 30				add edx, 48
  00000173  52					push edx
 					
+					; This isn't working when using both positive and negative, or negative before positive
+					; I think this is because the extra byte is still in the outstring, but I can't get a working way
+					; to erase the whole string var everytime and start fresh
  00000174				sign_check:
  00000174  8B 45 08				mov eax, [ebp+8]
  00000177  83 F8 00				cmp eax, 0
@@ -418,7 +421,11 @@ Microsoft (R) Macro Assembler Version 14.25.28614.0	    06/07/20 18:45:28
 
  0000019A			WriteVal ENDP
 					
-
+				; Fills array withs integers
+				;receives: Arrray address, array size
+				;returns: 
+				;preconditions: Array has been initalized
+				;registers changed: eax, ecx, edi
  0000019A			FillArray PROC
  0000019A  55				push ebp
  0000019B  8B EC			mov ebp, esp
@@ -447,6 +454,11 @@ Microsoft (R) Macro Assembler Version 14.25.28614.0	    06/07/20 18:45:28
  000001BC  C2 0018			ret 24
  000001BF			FillArray ENDP
 
+				;Reads all integers in array and displays
+				;receives: Array and aray size
+				;returns: 
+				;preconditions: Array has been initalized with values
+				;registers changed: eax, ecx, edi
  000001BF			DisplayArray PROC
 
  000001BF  55				push ebp
@@ -500,6 +512,11 @@ Microsoft (R) Macro Assembler Version 14.25.28614.0	    06/07/20 18:45:28
 
  000001FB			DisplayArray ENDP
 
+				;Calcautes sum of values in array
+				;receives: Array, array size
+				;returns: sum in sum variable
+				;preconditions: Array initalized with values and sum var initialized
+				;registers changed: eax, ecx, edi
  000001FB			CalculateSum PROC
  000001FB  55				push ebp 
  000001FC  8B EC			mov ebp, esp
@@ -532,6 +549,11 @@ Microsoft (R) Macro Assembler Version 14.25.28614.0	    06/07/20 18:45:28
  0000021C  C2 0008			ret 8
  0000021F			CalculateSum ENDP
 
+				;Calculate average of array values
+				;receives: Sum, array size
+				;returns: Average in average variable
+				;preconditions: Sum calculated 
+				;registers changed: eax, ebx, edx
  0000021F			CalculateAverage PROC
  0000021F  55				push ebp
  00000220  8B EC			mov ebp, esp
@@ -557,7 +579,7 @@ Microsoft (R) Macro Assembler Version 14.25.28614.0	    06/07/20 18:45:28
 
 
 				END main
-Microsoft (R) Macro Assembler Version 14.25.28614.0	    06/07/20 18:45:28
+Microsoft (R) Macro Assembler Version 14.25.28614.0	    06/07/20 19:53:47
 #Program Template     (template.asm			     Symbols 2 - 1
 
 

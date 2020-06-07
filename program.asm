@@ -121,7 +121,7 @@ main PROC
 main ENDP
 
 ;Reads string of characters and stores as signed integer
-;receives: 
+;receives: Prompt, outstring, string length 
 ;returns: Signed integer in eax
 ;preconditions: 
 ;registers changed: eax, ebx, ecx, esi
@@ -233,11 +233,11 @@ ReadVal PROC
 
 ReadVal ENDP
 
-;Reads string of characters and stores as signed integer
-;receives: 
-;returns: String in edx
-;preconditions: 
-;registers changed: eax, ebx, ecx, esi
+;Reads signed integer and writes as string of characters
+;receives: Signed integer, outstring
+;returns: 
+;preconditions: Signed integer must be provided and outstring initalized
+;registers changed: eax, ebx, ecx, edx, edi
 WriteVal PROC
 	push ebp
 	mov ebp, esp
@@ -292,6 +292,9 @@ WriteVal PROC
 		add edx, 48
 		push edx
 	
+	; This isn't working when using both positive and negative, or negative before positive
+	; I think this is because the extra byte is still in the outstring, but I can't get a working way
+	; to erase the whole string var everytime and start fresh
 	sign_check:
 		mov eax, [ebp+8]
 		cmp eax, 0
@@ -323,7 +326,11 @@ WriteVal PROC
 
 WriteVal ENDP
 	
-
+; Fills array withs integers
+;receives: Arrray address, array size
+;returns: 
+;preconditions: Array has been initalized
+;registers changed: eax, ecx, edi
 FillArray PROC
 	push ebp
 	mov ebp, esp
@@ -352,6 +359,11 @@ FillArray PROC
 	ret 24
 FillArray ENDP
 
+;Reads all integers in array and displays
+;receives: Array and aray size
+;returns: 
+;preconditions: Array has been initalized with values
+;registers changed: eax, ecx, edi
 DisplayArray PROC
 
 	push ebp
@@ -397,6 +409,11 @@ DisplayArray PROC
 
 DisplayArray ENDP
 
+;Calcautes sum of values in array
+;receives: Array, array size
+;returns: sum in sum variable
+;preconditions: Array initalized with values and sum var initialized
+;registers changed: eax, ecx, edi
 CalculateSum PROC
 	push ebp 
 	mov ebp, esp
@@ -429,6 +446,11 @@ CalculateSum PROC
 	ret 8
 CalculateSum ENDP
 
+;Calculate average of array values
+;receives: Sum, array size
+;returns: Average in average variable
+;preconditions: Sum calculated 
+;registers changed: eax, ebx, edx
 CalculateAverage PROC
 	push ebp
 	mov ebp, esp
