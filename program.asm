@@ -99,6 +99,7 @@ main PROC
 	call DisplayArray
 
 	; Calculate sum
+	push OFFSET sum
 	push ARRAYSIZE
 	push OFFSET array
 	call CalculateSum
@@ -110,6 +111,7 @@ main PROC
 	call Crlf
 
 	; Calcaulate average
+	push OFFSET average
 	push ARRAYSIZE
 	push sum
 	call CalculateAverage
@@ -148,6 +150,9 @@ ReadVal PROC
 		jmp validate
 
 	validate:
+		; Clear eax from previous number
+		mov eax, 0
+
 		; Load string byte
 		lodsb
 
@@ -411,23 +416,27 @@ DisplayArray PROC
 DisplayArray ENDP
 
 ;Calcautes sum of values in array
-;receives: Array, array size
+;receives: Array, sum, array size
 ;returns: sum in sum variable
 ;preconditions: Array initalized with values and sum var initialized
-;registers changed: eax, ecx, edi
+;registers changed: eax, ebx, ecx, edi
 CalculateSum PROC
 	push ebp 
 	mov ebp, esp
 
 	push eax
+	push ebx
 	push ecx
 	push edi
 
 	; array address
 	mov edi, [ebp+8]
 
-	; setup to loop through array
+	; setup to loop through array according to size
 	mov ecx, [ebp+12]
+
+	; Adddress of sum in ebx
+	mov ebx, [ebp+16]
 
 	mov eax, 0
 
@@ -437,18 +446,20 @@ CalculateSum PROC
 		add edi, 4
 		loop sum_loop
 
-	mov sum, eax
+	; Assign caclulated sum to sum variable at address in ebx
+	mov [ebx], eax
 
 	pop edi
 	pop ecx
+	pop ebx
 	pop eax
 
 	pop ebp
-	ret 8
+	ret 12 
 CalculateSum ENDP
 
 ;Calculate average of array values
-;receives: Sum, array size
+;receives: Sum, array size, average
 ;returns: Average in average variable
 ;preconditions: Sum calculated 
 ;registers changed: eax, ebx, edx
@@ -460,19 +471,24 @@ CalculateAverage PROC
 	push ebx
 	push edx
 
+	; calculate average in eax
 	mov eax, [ebp+8]
 	mov ebx, [ebp+12]
 	cdq
-
 	idiv ebx
-	mov average, eax
+
+	; address of average in ebx
+	mov ebx, [ebp+16]
+	
+	; move value into average
+	mov [ebx], eax
 
 	pop edx
 	pop ebx
 	pop eax
 
 	pop ebp
-	ret 8
+	ret 12
 CalculateAverage ENDP
 
 
